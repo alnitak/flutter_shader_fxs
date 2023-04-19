@@ -21,3 +21,7 @@ Used for examample for page_curl.frag shader
 display it to grab its snapshot image. So the its state is not with its real state:
 in the example, scrolling the ListView and press the play button, will 
 first show the ListView not scrolled.
+
+
+https://user-images.githubusercontent.com/192827/233055440-e1ca16d3-1bce-4a82-977b-a01cdec1d734.mp4
+
