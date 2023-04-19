@@ -30,5 +30,4 @@ flutter:
 
   assets:
     - assets/
-    - assets/covers/
     - assets/gifs/
