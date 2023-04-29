@@ -1,11 +1,14 @@
 #version 460 core
+#include <flutter/runtime_effect.glsl>
 precision mediump float;
 
-#include <flutter/runtime_effect.glsl>
-
 layout(location = 0) uniform sampler2D iChannel0;
-layout(location = 1) uniform vec2 uResolution;
-layout(location = 2) uniform float iTime;
+layout(location = 1) uniform sampler2D iChannel1;
+layout(location = 2) uniform sampler2D iChannel2;
+layout(location = 3) uniform sampler2D iChannel3;
+layout(location = 4) uniform vec2 uResolution;
+layout(location = 5) uniform float iTime;
+layout(location = 6) uniform vec4 iMouse;
 
 out vec4 fragColor;
 

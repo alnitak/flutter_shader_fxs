@@ -1,7 +1,7 @@
 name: shader_fxs
 description: Flutter transitions using shaders.
 version: 0.0.1
-homepage:
+homepage: https://github.com/alnitak/flutter_shader_fxs
 
 environment:
   sdk: '>=2.19.5 <3.0.0'
@@ -20,16 +20,5 @@ dev_dependencies:
 
 flutter:
 
-  shaders:
-    - assets/radial_blur.frag
-    - assets/zoomblur.frag
-    - assets/curl_noise.frag
-    - assets/screen_melt.frag
-    - assets/page_curl.frag
-    - assets/noise_fade.frag
-    - assets/test.frag
-
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
-  #
+ assets:
+   - assets/

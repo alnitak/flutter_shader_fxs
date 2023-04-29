@@ -1,14 +1,14 @@
 #version 460 core
-precision mediump float;
-
 #include <flutter/runtime_effect.glsl>
+precision mediump float;
 
 layout(location = 0) uniform sampler2D iChannel0;
 layout(location = 1) uniform sampler2D iChannel1;
-layout(location = 2) uniform float uResolutionX;
-layout(location = 3) uniform float uResolutionY;
-layout(location = 4) uniform float iTime;
-layout(location = 5) uniform float deltaTime;
+layout(location = 2) uniform sampler2D iChannel2;
+layout(location = 3) uniform sampler2D iChannel3;
+layout(location = 4) uniform vec2 uResolution;
+layout(location = 5) uniform float iTime;
+layout(location = 6) uniform vec4 iMouse;
 
 out vec4 fragColor;
 
@@ -18,8 +18,6 @@ vec3 iResolution;
 // https://www.shadertoy.com/view/tdj3W3
 
 // ------ START SHADERTOY CODE -----
-
-
 vec3 mod289(vec3 x) {
     return x - floor(x * (1.0 / 289.0)) * 289.0;
 }
@@ -138,7 +136,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec2 uv = fragCoord/iResolution.xy;
     float f = cos(iTime) * 0.5 +0.5;
     vec3 curl = curlNoise(vec3(uv,1.) *5. + iTime) / 1.;
-    // curl = curl * curl;
+    curl = curl * curl;
 
     vec4 t0 = texture(iChannel0, vec2(uv.x,uv.y + f * (curl.x) ) );
     vec4 t1 = texture(iChannel1, vec2(uv.x,uv.y + (1.-f) * (curl.x) ));
@@ -154,7 +152,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
 
 void main() {
-    iResolution = vec3(uResolutionX, uResolutionY, 0.);
+    iResolution = vec3(uResolution.x, uResolution.y, 0.);
 
     mainImage( fragColor, FlutterFragCoord().xy );
 }

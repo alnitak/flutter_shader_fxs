@@ -1,14 +1,14 @@
 #version 460 core
-precision mediump float;
-
 #include <flutter/runtime_effect.glsl>
+precision mediump float;
 
 layout(location = 0) uniform sampler2D iChannel0;
 layout(location = 1) uniform sampler2D iChannel1;
-layout(location = 2) uniform float uResolutionX;
-layout(location = 3) uniform float uResolutionY;
-layout(location = 4) uniform float iTime;
-layout(location = 5) uniform float deltaTime;
+layout(location = 2) uniform sampler2D iChannel2;
+layout(location = 3) uniform sampler2D iChannel3;
+layout(location = 4) uniform vec2 uResolution;
+layout(location = 5) uniform float iTime;
+layout(location = 6) uniform vec4 iMouse;
 
 out vec4 fragColor;
 
@@ -69,7 +69,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
 
 
 void main() {
-    iResolution = vec3(uResolutionX, uResolutionY, 0.);
+    iResolution = vec3(uResolution.x, uResolution.y, 0.);
 
     mainImage( fragColor, FlutterFragCoord().xy );
 }

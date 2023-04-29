@@ -1,13 +1,14 @@
 #version 460 core
-precision mediump float;
-
 #include <flutter/runtime_effect.glsl>
+precision mediump float;
 
 layout(location = 0) uniform sampler2D iChannel0;
 layout(location = 1) uniform sampler2D iChannel1;
-layout(location = 2) uniform vec2 uResolution;
-layout(location = 3) uniform float iTime;
-layout(location = 4) uniform vec4 iMouse;
+layout(location = 2) uniform sampler2D iChannel2;
+layout(location = 3) uniform sampler2D iChannel3;
+layout(location = 4) uniform vec2 uResolution;
+layout(location = 5) uniform float iTime;
+layout(location = 6) uniform vec4 iMouse;
 
 out vec4 fragColor;
 
@@ -47,12 +48,12 @@ float random(in vec3 scale, in float seed) {
 }
 
 vec3 crossFade(in vec2 uv, in float dissolve) {
-    return mix(texture(iChannel0, uv).rgb, texture(iChannel1, uv).rgb, dissolve);
+    return mix(texture(iChannel1, uv).rgb, texture(iChannel0, uv).rgb, dissolve);
 }
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
     vec2 texCoord = fragCoord.xy / iResolution.xy;
-    float progress = cos(iTime*0.5) * 0.5 + 0.5;
+    float progress = cos(iTime*1.5) * 0.5 + 0.5;
     // Linear interpolate center across center half of the image
     vec2 center = vec2(Linear_ease(0.5, 0.0, 1.0, progress),0.5);
     float dissolve = Exponential_easeInOut(0.0, 1.0, 1.0, progress);

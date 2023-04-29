@@ -1,8 +1,8 @@
 name: example
-description: A new Flutter project.
+description: ShaderFXs example.
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 0.0.0+1
 
 environment:
   sdk: '>=2.19.0 <3.0.0'
@@ -13,6 +13,12 @@ dependencies:
 
   cupertino_icons: ^1.0.2
 
+  #https://pub.dev/packages/star_menu
+  star_menu: ^3.1.4
+
+  #https://pub.dev/packages/hooks_riverpod
+  hooks_riverpod: ^2.3.5
+
   shader_fxs:
     path: ../
 
@@ -22,8 +28,6 @@ dev_dependencies:
 
   flutter_lints: ^2.0.1
 
-  hooks_riverpod: any
-
 flutter:
 
   uses-material-design: true
@@ -31,3 +35,17 @@ flutter:
   assets:
     - assets/
     - assets/gifs/
+
+  shaders:
+    - assets/shaders/radial_blur.frag
+    - assets/shaders/zoom_blur.frag
+    - assets/shaders/curl_noise.frag
+    - assets/shaders/screen_melt.frag
+    - assets/shaders/page_curl.frag
+    - assets/shaders/noise_fade.frag
+    - assets/shaders/ripple.frag
+    - assets/shaders/test1.frag
+    - assets/shaders/test2.frag
+    - assets/shaders/test3.frag
+    - assets/shaders/test4.frag
+    - assets/shaders/test5.frag

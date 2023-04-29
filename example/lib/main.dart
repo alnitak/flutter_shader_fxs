@@ -1,10 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shader_fxs/shader_fxs.dart';
 
 import 'page1.dart';
-import 'page2.dart';
+import 'shader_ex.dart';
+import 'transition_ex.dart';
 
 final songProvider = StateProvider<Song>((ref) {
   return songList[0];
@@ -50,54 +50,27 @@ class MyHomePage extends ConsumerStatefulWidget {
 }
 
 class _MyHomePageState extends ConsumerState<MyHomePage> {
-  late ShaderController shaderController;
-
-  @override
-  void initState() {
-    super.initState();
-    shaderController = ShaderController()
-      ..addListener(() {
-        debugPrint('shaderController: ${shaderController.state}');
-      });
-  }
-
-  @override
-  void dispose() {
-    shaderController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          // Page1(),
-          ShaderTransition(
-            controller: shaderController,
-            duration: const Duration(milliseconds: 2500),
-            foregroundChild: Page1(),
-            backgroundChild: Page2(),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Shader FXs example'),
+          bottom: const TabBar(
+            tabs: [
+              Text('testing shaders'),
+              Text('example'),
+            ],
           ),
-        ],
-      ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            child: const Icon(Icons.timer_outlined),
-            onPressed: () {
-              print(shaderController.progress!());
-            },
-          ),
-          const SizedBox(width: 16),
-          FloatingActionButton(
-            child: const Icon(Icons.play_arrow),
-            onPressed: () {
-              shaderController.start!();
-            },
-          ),
-        ],
+        ),
+        body: const TabBarView(
+          physics: NeverScrollableScrollPhysics(),
+          children: [
+            ShaderPage(),
+            Transition(),
+          ],
+        ),
       ),
     );
   }

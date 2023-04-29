@@ -1,9 +1,10 @@
-import 'package:example/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shader_fxs/shader_fxs.dart';
 
-import 'page2.dart';
+final songProvider = StateProvider<Song>((ref) {
+  return songList[0];
+});
 
 class Song {
   Song(
@@ -23,7 +24,6 @@ class Song {
 
 final List<Song> songList = [
   Song(
-    // 'assets/covers/Dire_Straits-Brothers_In_Arms-Frontal.jpg',
     'assets/gifs/8.gif',
     'Dire Straits',
     'Brothers in Arms',
@@ -31,7 +31,6 @@ final List<Song> songList = [
     '08:26',
   ),
   Song(
-    // 'assets/covers/Dire_Straits-Brothers_In_Arms-Frontal.jpg',
     'assets/gifs/1.gif',
     'Dire Straits',
     'Brothers in Arms',
@@ -39,7 +38,6 @@ final List<Song> songList = [
     '08:26',
   ),
   Song(
-    // 'assets/covers/ScorpionsCrazyWorld.jpg',
     'assets/gifs/2.gif',
     'Scorpions',
     'Crazy World',
@@ -47,7 +45,6 @@ final List<Song> songList = [
     '04:46',
   ),
   Song(
-    // 'assets/covers/Dire_Straits-Brothers_In_Arms-Frontal.jpg',
     'assets/gifs/9.gif',
     'Dire Straits',
     'Brothers in Arms',
@@ -55,7 +52,6 @@ final List<Song> songList = [
     '06:59',
   ),
   Song(
-    // 'assets/covers/Dire_Straits-Brothers_In_Arms-Frontal.jpg',
     'assets/gifs/5.gif',
     'Dire Straits',
     'Brothers in Arms',
@@ -63,7 +59,6 @@ final List<Song> songList = [
     '06:31',
   ),
   Song(
-    // 'assets/covers/ScorpionsCrazyWorld.jpg',
     'assets/gifs/7.gif',
     'Scorpions',
     'Crazy World',
@@ -71,7 +66,6 @@ final List<Song> songList = [
     '05:13',
   ),
   Song(
-    // 'assets/covers/Dire_Straits-Brothers_In_Arms-Frontal.jpg',
     'assets/gifs/10.gif',
     'Dire Straits',
     'Brothers in Arms',
@@ -79,7 +73,6 @@ final List<Song> songList = [
     '04:42',
   ),
   Song(
-    // 'assets/covers/Dire_Straits-Brothers_In_Arms-Frontal.jpg',
     'assets/gifs/4.gif',
     'Dire Straits',
     'Brothers in Arms',
@@ -87,7 +80,6 @@ final List<Song> songList = [
     '04:14',
   ),
   Song(
-    // 'assets/covers/ScorpionsCrazyWorld.jpg',
     'assets/gifs/6.gif',
     'Scorpions',
     'Crazy World',
@@ -95,7 +87,6 @@ final List<Song> songList = [
     '04:51',
   ),
   Song(
-    // 'assets/covers/Dire_Straits-Brothers_In_Arms-Frontal.jpg',
     'assets/gifs/0.gif',
     'Dire Straits',
     'Brothers in Arms',
@@ -103,7 +94,6 @@ final List<Song> songList = [
     '05:10',
   ),
   Song(
-    // 'assets/covers/ScorpionsCrazyWorld.jpg',
     'assets/gifs/3.gif',
     'Scorpions',
     'Crazy World',
@@ -117,44 +107,88 @@ class Page1 extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    /// set a controller for each item rows
+    List<ShaderController> controllers =
+        List.generate(songList.length, (index) {
+      ShaderController ctrl = ShaderController();
+      ctrl.addListener(() async {
+        /// here it's possible to check the user pointer coordinates
+        /// and, in case of using page curl effect, swap
+        /// the children when the user pan to the leftmost position
+        PointerState pointerState = ctrl.pointerState;
+        IMouse pointerDetails = ctrl.pointerDetails;
+        ShaderState shaderState = ctrl.shaderState;
+
+        // if pointer comes from rigth (pointerDetails.z) and
+        // moved to the left
+        // and the pointer is still moving
+        // and the shader is running
+        // then the page has been curled
+        if (pointerDetails.x < 0.2 &&
+            pointerDetails.z > 0.2 &&
+            pointerState == PointerState.onPointerMove &&
+            shaderState == ShaderState.running) {
+          ctrl.reset!();
+          ctrl.swapChildren!();
+          ctrl.stop!();
+        }
+
+        // if pointer is up and shader still running
+        // reset the shader to the first iChannel
+        if (pointerState == PointerState.onPointerUp &&
+            shaderState == ShaderState.running) {
+          ctrl.reset!();
+        }
+      });
+      return ctrl;
+    });
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Shader FXs'),
-      ),
       body: ListView.builder(
         itemCount: songList.length,
+        // itemExtent: 100,
         itemBuilder: (_, index) {
-          return ShaderInteractive(
-            backgroundChild: SongRow(
-              isBackgroundChild: true,
-              index: index,
-              song: songList[index],
-              onTap: (song) {
-                ref.read(songProvider.notifier).update((state) => song);
-              },
-            ),
-            foregroundChild: SongRow(
-              isBackgroundChild: false,
-              index: index,
-              song: songList[index],
-              onTap: (song) {
-                ref.read(songProvider.notifier).update((state) => song);
-              },
+          return SizedBox( // to give a finite height to the ShaderFXs
+            height: 100,
+            child: ShaderFXs(
+              key: UniqueKey(),
+              shaderAsset: 'assets/shaders/page_curl.frag',
+              autoStartWhenTapped: true,
+              startRunning: false,
+              iChannels: [
+                ChannelTexture(
+                  child: SongRow(
+                    isBackgroundChild: false,
+                    index: index,
+                    song: songList[index],
+                    onTap: (song) {
+                      ref.read(songProvider.notifier).update((state) => song);
+                    },
+                  ),
+                ),
+                ChannelTexture(
+                  child: SongRow(
+                    isBackgroundChild: true,
+                    index: index,
+                    song: songList[index],
+                    onTap: (song) {
+                      ref.read(songProvider.notifier).update((state) => song);
+                    },
+                  ),
+                ),
+                ChannelTexture(),
+                ChannelTexture(),
+              ],
+              controller: controllers.elementAt(index),
             ),
           );
-          // return SongRow(
-          //   isBackgroundChild: false,
-          //   index: index,
-          //   song: songList[index],
-          //   onTap: (song) {
-          //   },
-          // );
         },
       ),
     );
   }
 }
 
+/// ListView row
 class SongRow extends ConsumerWidget {
   const SongRow({
     Key? key,
@@ -178,7 +212,6 @@ class SongRow extends ConsumerWidget {
           borderRadius: BorderRadius.all(Radius.circular(0)),
         ),
         child: Container(
-          height: 100,
           padding: const EdgeInsets.only(left: 12),
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -202,6 +235,7 @@ class SongRow extends ConsumerWidget {
   }
 }
 
+/// foreground ListView row
 class ForegroundChild extends StatelessWidget {
   const ForegroundChild({
     Key? key,
@@ -243,6 +277,7 @@ class ForegroundChild extends StatelessWidget {
   }
 }
 
+/// background ListView row
 class BackgroundChild extends ConsumerWidget {
   const BackgroundChild({
     Key? key,
@@ -271,21 +306,6 @@ class BackgroundChild extends ConsumerWidget {
               title,
               textScaleFactor: 1.8,
               style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: FloatingActionButton(
-              backgroundColor: Colors.black.withOpacity(0.3),
-              foregroundColor: Colors.white,
-              onPressed: () {
-                print('ICON PRESSED');
-                onTap();
-              },
-              child: const Icon(Icons.arrow_forward),
             ),
           ),
         ),
