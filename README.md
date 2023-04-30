@@ -27,6 +27,8 @@ flutter channel [master|stable]
 flutter upgrade
 ```
 
+[Here](https://marcobavagnoli.com/ShaderFXs/#/) a web example!
+
 # Usage
 
 Store your fragment shader in your assets folder, then link it into pubspec.yeaml under *flutter* key:
