@@ -178,6 +178,13 @@ in each of the .frag sources.
 
 The following are screen recording of the example running on a Linux machine with AMD Ryzen 9 5950X and a Radeon RX 6600 XT
 
+https://user-images.githubusercontent.com/192827/235312576-45e530ac-2910-4dc7-a54d-e1f35efd0489.mp4
+
+https://user-images.githubusercontent.com/192827/235312580-8a5e311e-5f11-4952-95b9-5560d726c956.mp4
+
+https://user-images.githubusercontent.com/192827/235312584-e344b747-4b57-4636-89d8-d495c0b1e193.mp4
+
+
 
 
 
