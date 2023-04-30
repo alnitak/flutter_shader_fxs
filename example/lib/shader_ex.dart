@@ -51,54 +51,56 @@ class ShaderPage extends ConsumerWidget {
 
     ShaderController controller = ShaderController();
     // controller.addListener(() async {
-      // /// here it's possible to check the user pointer coordinates
-      // /// and, in case of using page curl effect, swap
-      // /// the children when the user pan to the leftmost position
-      // PointerState pointerState = controller.pointerState;
-      // IMouse pointerDetails = controller.pointerDetails;
-      // ShaderState shaderState = controller.shaderState;
-      // print('******** $shaderState      $pointerDetails   $pointerState');
-      //
-      // if (pointerDetails.x < 0.2 && pointerDetails.z > 0.2 &&
-      //     pointerState == PointerState.onPointerMove &&
-      //     shaderState == ShaderState.running
-      // ) {
-      //   controller.reset!();
-      //   controller.swapChildren!();
-      //   controller.stop!();
-      //   ref.read(runningProvider.notifier).update((state) => false);
-      // }
+    // /// here it's possible to check the user pointer coordinates
+    // /// and, in case of using page curl effect, swap
+    // /// the children when the user pan to the leftmost position
+    // PointerState pointerState = controller.pointerState;
+    // IMouse pointerDetails = controller.pointerDetails;
+    // ShaderState shaderState = controller.shaderState;
+    // print('******** $shaderState      $pointerDetails   $pointerState');
+    //
+    // if (pointerDetails.x < 0.2 && pointerDetails.z > 0.2 &&
+    //     pointerState == PointerState.onPointerMove &&
+    //     shaderState == ShaderState.running
+    // ) {
+    //   controller.reset!();
+    //   controller.swapChildren!();
+    //   controller.stop!();
+    //   ref.read(runningProvider.notifier).update((state) => false);
+    // }
     // });
 
     return Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            shaderWidget(listIndex, fragIndex, controller, chan0,chan1,chan2,chan3),
-            const SizedBox(height: 8),
-
-            Expanded(
-              child: ListView(
-                shrinkWrap: true,
-                children: buttons(listIndex, fragIndex, controller, ref),
-              ),
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          shaderWidget(
+              listIndex, fragIndex, controller, chan0, chan1, chan2, chan3),
+          const SizedBox(height: 8),
+          Expanded(
+            child: ListView(
+              shrinkWrap: true,
+              children: buttons(listIndex, fragIndex, controller, ref),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
     );
   }
-
-
-
-
 
   String fragmentButtonText(String assetName) {
     return assetName.split('/').last.split('.').first.replaceAll('_', ' ');
   }
 
-  Widget shaderWidget(int listIndex, int fragIndex, ShaderController controller,
-      ChannelTexture chan0, ChannelTexture chan1, ChannelTexture chan2, ChannelTexture chan3 ) {
+  Widget shaderWidget(
+      int listIndex,
+      int fragIndex,
+      ShaderController controller,
+      ChannelTexture chan0,
+      ChannelTexture chan1,
+      ChannelTexture chan2,
+      ChannelTexture chan3) {
     return Center(
       child: SizedBox(
         width: 400,
@@ -115,26 +117,29 @@ class ShaderPage extends ConsumerWidget {
     );
   }
 
-  List<Widget> buttons(int listIndex, int fragIndex, ShaderController controller, WidgetRef ref) {
+  List<Widget> buttons(int listIndex, int fragIndex,
+      ShaderController controller, WidgetRef ref) {
     return [
       /// FRAGMENT BUTTONS
       ///
       // 2 channel textures
-      const Text('2 channel textures', style: TextStyle(color: Colors.greenAccent, fontWeight: FontWeight.bold),),
+      const Text(
+        '2 channel textures',
+        style:
+            TextStyle(color: Colors.greenAccent, fontWeight: FontWeight.bold),
+      ),
       Wrap(
         runSpacing: 4,
         spacing: 6,
         children: List<Widget>.generate(
           fragLists[0].length,
-              (index) {
+          (index) {
             return ElevatedButton(
               style: listIndex == 0 && index == fragIndex
                   ? const ButtonStyle(
-                  backgroundColor:
-                  MaterialStatePropertyAll(Colors.green))
+                      backgroundColor: MaterialStatePropertyAll(Colors.green))
                   : const ButtonStyle(
-                  backgroundColor:
-                  MaterialStatePropertyAll(Colors.black)),
+                      backgroundColor: MaterialStatePropertyAll(Colors.black)),
               onPressed: () {
                 ref
                     .read(fragsIndexProvider.notifier)
@@ -148,21 +153,23 @@ class ShaderPage extends ConsumerWidget {
       const Divider(),
 
       // 1 channel texture
-      const Text('1 channel texture', style: TextStyle(color: Colors.greenAccent, fontWeight: FontWeight.bold),),
+      const Text(
+        '1 channel texture',
+        style:
+            TextStyle(color: Colors.greenAccent, fontWeight: FontWeight.bold),
+      ),
       Wrap(
         runSpacing: 4,
         spacing: 6,
         children: List<Widget>.generate(
           fragLists[1].length,
-              (index) {
+          (index) {
             return ElevatedButton(
               style: listIndex == 1 && index == fragIndex
                   ? const ButtonStyle(
-                  backgroundColor:
-                  MaterialStatePropertyAll(Colors.green))
+                      backgroundColor: MaterialStatePropertyAll(Colors.green))
                   : const ButtonStyle(
-                  backgroundColor:
-                  MaterialStatePropertyAll(Colors.black)),
+                      backgroundColor: MaterialStatePropertyAll(Colors.black)),
               onPressed: () {
                 ref
                     .read(fragsIndexProvider.notifier)
@@ -176,21 +183,23 @@ class ShaderPage extends ConsumerWidget {
       const Divider(),
 
       // no channel texture
-      const Text('no channel textures', style: TextStyle(color: Colors.greenAccent, fontWeight: FontWeight.bold),),
+      const Text(
+        'no channel textures',
+        style:
+            TextStyle(color: Colors.greenAccent, fontWeight: FontWeight.bold),
+      ),
       Wrap(
         runSpacing: 4,
         spacing: 6,
         children: List<Widget>.generate(
           fragLists[2].length,
-              (index) {
+          (index) {
             return ElevatedButton(
               style: listIndex == 2 && index == fragIndex
                   ? const ButtonStyle(
-                  backgroundColor:
-                  MaterialStatePropertyAll(Colors.green))
+                      backgroundColor: MaterialStatePropertyAll(Colors.green))
                   : const ButtonStyle(
-                  backgroundColor:
-                  MaterialStatePropertyAll(Colors.black)),
+                      backgroundColor: MaterialStatePropertyAll(Colors.black)),
               onPressed: () {
                 ref
                     .read(fragsIndexProvider.notifier)
@@ -213,8 +222,7 @@ class ShaderPage extends ConsumerWidget {
             ElevatedButton(
               style: isRunning
                   ? const ButtonStyle(
-                  backgroundColor:
-                  MaterialStatePropertyAll(Colors.green))
+                      backgroundColor: MaterialStatePropertyAll(Colors.green))
                   : null,
               onPressed: () {
                 controller.start!();
@@ -225,8 +233,7 @@ class ShaderPage extends ConsumerWidget {
             ElevatedButton(
               style: !isRunning
                   ? const ButtonStyle(
-                  backgroundColor:
-                  MaterialStatePropertyAll(Colors.green))
+                      backgroundColor: MaterialStatePropertyAll(Colors.green))
                   : null,
               onPressed: () {
                 controller.stop!();

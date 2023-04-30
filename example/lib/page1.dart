@@ -144,45 +144,55 @@ class Page1 extends ConsumerWidget {
     });
 
     return Scaffold(
-      body: ListView.builder(
-        itemCount: songList.length,
-        // itemExtent: 100,
-        itemBuilder: (_, index) {
-          return SizedBox( // to give a finite height to the ShaderFXs
-            height: 100,
-            child: ShaderFXs(
-              key: UniqueKey(),
-              shaderAsset: 'assets/shaders/page_curl.frag',
-              autoStartWhenTapped: true,
-              startRunning: false,
-              iChannels: [
-                ChannelTexture(
-                  child: SongRow(
-                    isBackgroundChild: false,
-                    index: index,
-                    song: songList[index],
-                    onTap: (song) {
-                      ref.read(songProvider.notifier).update((state) => song);
-                    },
-                  ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 500),
+          child: ListView.builder(
+            itemCount: songList.length,
+            // itemExtent: 100,
+            itemBuilder: (_, index) {
+              return SizedBox(
+                // to give a finite height to the ShaderFXs
+                height: 100,
+                child: ShaderFXs(
+                  key: UniqueKey(),
+                  shaderAsset: 'assets/shaders/page_curl.frag',
+                  autoStartWhenTapped: true,
+                  startRunning: false,
+                  iChannels: [
+                    ChannelTexture(
+                      child: SongRow(
+                        isBackgroundChild: false,
+                        index: index,
+                        song: songList[index],
+                        onTap: (song) {
+                          ref
+                              .read(songProvider.notifier)
+                              .update((state) => song);
+                        },
+                      ),
+                    ),
+                    ChannelTexture(
+                      child: SongRow(
+                        isBackgroundChild: true,
+                        index: index,
+                        song: songList[index],
+                        onTap: (song) {
+                          ref
+                              .read(songProvider.notifier)
+                              .update((state) => song);
+                        },
+                      ),
+                    ),
+                    ChannelTexture(),
+                    ChannelTexture(),
+                  ],
+                  controller: controllers.elementAt(index),
                 ),
-                ChannelTexture(
-                  child: SongRow(
-                    isBackgroundChild: true,
-                    index: index,
-                    song: songList[index],
-                    onTap: (song) {
-                      ref.read(songProvider.notifier).update((state) => song);
-                    },
-                  ),
-                ),
-                ChannelTexture(),
-                ChannelTexture(),
-              ],
-              controller: controllers.elementAt(index),
-            ),
-          );
-        },
+              );
+            },
+          ),
+        ),
       ),
     );
   }
