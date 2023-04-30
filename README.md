@@ -11,8 +11,8 @@ A flutter pluging to use shaders and use them to make transitions between widget
 |**iOS**|Problems setting samplers|Problems setting samplers|
 |**web**|Not yet supported|Slow but no issues|
 |**Linux**|• Images are not grabbed when used inside a widget</br>• Swap textures when using a widget doesn't work as expected|No issues|
-|**Windows**|No issues|No issues
-|**MacOS**|No issues|No issues
+|**Windows**|No issues|No issues|
+|**MacOS**|No issues|No issues|
 
 # Features
 

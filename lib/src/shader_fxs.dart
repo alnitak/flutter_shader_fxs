@@ -213,10 +213,10 @@ class _ShaderFXsState extends State<ShaderFXs> with TickerProviderStateMixin {
           assert(
               !(constraints.maxWidth == double.infinity ||
                   constraints.maxHeight == double.infinity),
-              'width, height or both are unconstrained.'
+              'width, height or both are unconstrained. '
               'For example, if this widget is a child of a ListView, '
               'please set ListView.itemExtent parameter or set '
-              'a fixed size to the children,');
+              'a fixed size to ShaderFXs parent');
           isSizeAcquired = true;
           widgetSize = Size(constraints.maxWidth, constraints.maxHeight);
 

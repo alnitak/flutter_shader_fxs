@@ -71,184 +71,186 @@ class ShaderPage extends ConsumerWidget {
     // });
 
     return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: SizedBox(
-              width: 400,
-              height: 250,
-              child: ShaderFXs(
-                key: UniqueKey(),
-                // autoStartWhenTapped: true,
-                startRunning: true,
-                shaderAsset: fragLists[listIndex][fragIndex],
-                iChannels: [chan0, chan1, chan2, chan3],
-                controller: controller,
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            shaderWidget(listIndex, fragIndex, controller, chan0,chan1,chan2,chan3),
+            const SizedBox(height: 8),
+
+            Expanded(
+              child: ListView(
+                shrinkWrap: true,
+                children: buttons(listIndex, fragIndex, controller, ref),
               ),
             ),
-          ),
-          const Spacer(),
+          ],
+        ),
+    );
+  }
 
-          /// FRAGMET BUTTNOS
-          ///
-          // 2 channel textures
-          Row(
-            children: [
-              const Text('2 channel   \ntextures'),
-              Expanded(
-                child: Wrap(
-                  runSpacing: 4,
-                  spacing: 6,
-                  children: List<Widget>.generate(
-                    fragLists[0].length,
-                    (index) {
-                      return ElevatedButton(
-                        style: listIndex == 0 && index == fragIndex
-                            ? const ButtonStyle(
-                                backgroundColor:
-                                    MaterialStatePropertyAll(Colors.green))
-                            : const ButtonStyle(
-                                backgroundColor:
-                                    MaterialStatePropertyAll(Colors.black)),
-                        onPressed: () {
-                          ref
-                              .read(fragsIndexProvider.notifier)
-                              .update((state) => [0, index]);
-                        },
-                        child: Text(fragmentButtonText(fragLists[0][index])),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
 
-          // 1 channel texture
-          Row(
-            children: [
-              const Text('1 channel   \ntexture'),
-              Expanded(
-                child: Wrap(
-                  runSpacing: 4,
-                  spacing: 6,
-                  children: List<Widget>.generate(
-                    fragLists[1].length,
-                    (index) {
-                      return ElevatedButton(
-                        style: listIndex == 1 && index == fragIndex
-                            ? const ButtonStyle(
-                                backgroundColor:
-                                    MaterialStatePropertyAll(Colors.green))
-                            : const ButtonStyle(
-                                backgroundColor:
-                                    MaterialStatePropertyAll(Colors.black)),
-                        onPressed: () {
-                          ref
-                              .read(fragsIndexProvider.notifier)
-                              .update((state) => [1, index]);
-                        },
-                        child: Text(fragmentButtonText(fragLists[1][index])),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
 
-          // no channel texture
-          Row(
-            children: [
-              const Text('no channel \ntextures'),
-              Expanded(
-                child: Wrap(
-                  runSpacing: 4,
-                  spacing: 6,
-                  children: List<Widget>.generate(
-                    fragLists[2].length,
-                    (index) {
-                      return ElevatedButton(
-                        style: listIndex == 2 && index == fragIndex
-                            ? const ButtonStyle(
-                                backgroundColor:
-                                    MaterialStatePropertyAll(Colors.green))
-                            : const ButtonStyle(
-                                backgroundColor:
-                                    MaterialStatePropertyAll(Colors.black)),
-                        onPressed: () {
-                          ref
-                              .read(fragsIndexProvider.notifier)
-                              .update((state) => [2, index]);
-                        },
-                        child: Text(fragmentButtonText(fragLists[2][index])),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
 
-          /// control buttons
-          Consumer(builder: (_, ref, __) {
-            var isRunning = ref.watch(runningProvider);
 
-            return Wrap(
-              spacing: 6,
-              children: [
-                ElevatedButton(
-                  style: isRunning
-                      ? const ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll(Colors.green))
-                      : null,
-                  onPressed: () {
-                    controller.start!();
-                    ref.read(runningProvider.notifier).update((state) => true);
-                  },
-                  child: const Text('start'),
-                ),
-                ElevatedButton(
-                  style: !isRunning
-                      ? const ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll(Colors.green))
-                      : null,
-                  onPressed: () {
-                    controller.stop!();
-                    ref.read(runningProvider.notifier).update((state) => false);
-                  },
-                  child: const Text('stop'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    controller.reset!();
-                  },
-                  child: const Text('reset'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    controller.swapChildren!();
-                  },
-                  child: const Text('swap 0-1'),
-                ),
-              ],
-            );
-          }),
-          const Spacer(),
-          const TextureChooser(),
-        ],
+  String fragmentButtonText(String assetName) {
+    return assetName.split('/').last.split('.').first.replaceAll('_', ' ');
+  }
+
+  Widget shaderWidget(int listIndex, int fragIndex, ShaderController controller,
+      ChannelTexture chan0, ChannelTexture chan1, ChannelTexture chan2, ChannelTexture chan3 ) {
+    return Center(
+      child: SizedBox(
+        width: 400,
+        height: 250,
+        child: ShaderFXs(
+          key: UniqueKey(),
+          // autoStartWhenTapped: true,
+          startRunning: true,
+          shaderAsset: fragLists[listIndex][fragIndex],
+          iChannels: [chan0, chan1, chan2, chan3],
+          controller: controller,
+        ),
       ),
     );
   }
 
-  String fragmentButtonText(String assetName) {
-    return assetName.split('/').last.split('.').first.replaceAll('_', ' ');
+  List<Widget> buttons(int listIndex, int fragIndex, ShaderController controller, WidgetRef ref) {
+    return [
+      /// FRAGMENT BUTTONS
+      ///
+      // 2 channel textures
+      const Text('2 channel textures', style: TextStyle(color: Colors.greenAccent, fontWeight: FontWeight.bold),),
+      Wrap(
+        runSpacing: 4,
+        spacing: 6,
+        children: List<Widget>.generate(
+          fragLists[0].length,
+              (index) {
+            return ElevatedButton(
+              style: listIndex == 0 && index == fragIndex
+                  ? const ButtonStyle(
+                  backgroundColor:
+                  MaterialStatePropertyAll(Colors.green))
+                  : const ButtonStyle(
+                  backgroundColor:
+                  MaterialStatePropertyAll(Colors.black)),
+              onPressed: () {
+                ref
+                    .read(fragsIndexProvider.notifier)
+                    .update((state) => [0, index]);
+              },
+              child: Text(fragmentButtonText(fragLists[0][index])),
+            );
+          },
+        ),
+      ),
+      const Divider(),
+
+      // 1 channel texture
+      const Text('1 channel texture', style: TextStyle(color: Colors.greenAccent, fontWeight: FontWeight.bold),),
+      Wrap(
+        runSpacing: 4,
+        spacing: 6,
+        children: List<Widget>.generate(
+          fragLists[1].length,
+              (index) {
+            return ElevatedButton(
+              style: listIndex == 1 && index == fragIndex
+                  ? const ButtonStyle(
+                  backgroundColor:
+                  MaterialStatePropertyAll(Colors.green))
+                  : const ButtonStyle(
+                  backgroundColor:
+                  MaterialStatePropertyAll(Colors.black)),
+              onPressed: () {
+                ref
+                    .read(fragsIndexProvider.notifier)
+                    .update((state) => [1, index]);
+              },
+              child: Text(fragmentButtonText(fragLists[1][index])),
+            );
+          },
+        ),
+      ),
+      const Divider(),
+
+      // no channel texture
+      const Text('no channel textures', style: TextStyle(color: Colors.greenAccent, fontWeight: FontWeight.bold),),
+      Wrap(
+        runSpacing: 4,
+        spacing: 6,
+        children: List<Widget>.generate(
+          fragLists[2].length,
+              (index) {
+            return ElevatedButton(
+              style: listIndex == 2 && index == fragIndex
+                  ? const ButtonStyle(
+                  backgroundColor:
+                  MaterialStatePropertyAll(Colors.green))
+                  : const ButtonStyle(
+                  backgroundColor:
+                  MaterialStatePropertyAll(Colors.black)),
+              onPressed: () {
+                ref
+                    .read(fragsIndexProvider.notifier)
+                    .update((state) => [2, index]);
+              },
+              child: Text(fragmentButtonText(fragLists[2][index])),
+            );
+          },
+        ),
+      ),
+      const Divider(),
+
+      /// control buttons
+      Consumer(builder: (_, ref, __) {
+        var isRunning = ref.watch(runningProvider);
+
+        return Wrap(
+          spacing: 6,
+          children: [
+            ElevatedButton(
+              style: isRunning
+                  ? const ButtonStyle(
+                  backgroundColor:
+                  MaterialStatePropertyAll(Colors.green))
+                  : null,
+              onPressed: () {
+                controller.start!();
+                ref.read(runningProvider.notifier).update((state) => true);
+              },
+              child: const Text('start'),
+            ),
+            ElevatedButton(
+              style: !isRunning
+                  ? const ButtonStyle(
+                  backgroundColor:
+                  MaterialStatePropertyAll(Colors.green))
+                  : null,
+              onPressed: () {
+                controller.stop!();
+                ref.read(runningProvider.notifier).update((state) => false);
+              },
+              child: const Text('stop'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                controller.reset!();
+              },
+              child: const Text('reset'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                controller.swapChildren!();
+              },
+              child: const Text('swap 0-1'),
+            ),
+          ],
+        );
+      }),
+      const Divider(),
+      const TextureChooser(),
+    ];
   }
 }
