@@ -27,6 +27,14 @@ class ChannelTexture {
   String toString() {
     return 'isDynamic: $isDynamic    child: $child   assetsImage: $assetsImage';
   }
+
+  ChannelTexture copyWith({
+    bool? isDynamic,
+  }) {
+    return ChannelTexture(
+      isDynamic: isDynamic ?? this.isDynamic,
+    );
+  }
 }
 
 /// /////////////////////////////////

@@ -1,10 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'example1.dart';
 
-import 'page1.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'example2.dart';
 import 'shader_ex.dart';
-import 'transition_ex.dart';
 
 final songProvider = StateProvider<Song>((ref) {
   return songList[0];
@@ -53,22 +53,24 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Shader FXs example'),
           bottom: const TabBar(
             tabs: [
-              Text('testing shaders'),
-              Text('example'),
+              Text('example 1'),
+              Text('example 2'),
+              Text('shaders tests'),
             ],
           ),
         ),
         body: const TabBarView(
           physics: NeverScrollableScrollPhysics(),
           children: [
+            Example1(),
+            Example2(),
             ShaderPage(),
-            Transition(),
           ],
         ),
       ),

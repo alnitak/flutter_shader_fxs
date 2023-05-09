@@ -6,15 +6,15 @@ import 'package:star_menu/star_menu.dart';
 import 'test_widget.dart';
 
 final iChannel0Provider = StateProvider<ChannelTexture>((ref) {
-  // return ChannelTexture(assetsImage: 'assets/gifs/9.gif', isDynamic: true);
-  // return ChannelTexture(assetsImage: 'assets/dash.png');
-  return ChannelTexture(child: TestWidget(color: Colors.deepPurple.shade700));
+  // return ChannelTexture(assetsImage: 'assets/gifs/1.gif', isDynamic: true);
+  // return ChannelTexture(assetsImage: 'assets/dash.png', isDynamic: false);
+  return ChannelTexture(child: TestWidget(color: Colors.deepPurple.shade700), isDynamic: false);
 });
 
 final iChannel1Provider = StateProvider<ChannelTexture>((ref) {
-  // return ChannelTexture(assetsImage: 'assets/gifs/9.gif', isDynamic: true);
-  // return ChannelTexture(assetsImage: 'assets/flutter.png');
-  return ChannelTexture(child: const TestWidget(color: Colors.white));
+  return ChannelTexture(assetsImage: 'assets/gifs/2.gif', isDynamic: false);
+  // return ChannelTexture(assetsImage: 'assets/flutter.png', isDynamic: false);
+  // return ChannelTexture(child: const TestWidget(color: Colors.white), isDynamic: false);
 });
 
 final iChannel2Provider = StateProvider<ChannelTexture>((ref) {

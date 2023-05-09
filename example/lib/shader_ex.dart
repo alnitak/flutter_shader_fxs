@@ -78,11 +78,9 @@ class ShaderPage extends ConsumerWidget {
           shaderWidget(
               listIndex, fragIndex, controller, chan0, chan1, chan2, chan3),
           const SizedBox(height: 8),
-          Expanded(
-            child: ListView(
-              shrinkWrap: true,
-              children: buttons(listIndex, fragIndex, controller, ref),
-            ),
+          ListView(
+            shrinkWrap: true,
+            children: buttons(listIndex, fragIndex, controller, ref),
           ),
         ],
       ),

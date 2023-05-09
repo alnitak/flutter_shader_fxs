@@ -20,11 +20,24 @@ class ShaderFXs extends StatefulWidget {
     this.iChannels,
   });
 
+  /// Controller to start, stop, reset and swap channels
+  /// Used also to get the current shader and pointer state or pointer gestures
   final ShaderController? controller;
+
+  /// auto start shader.
+  /// If set to false, it should be started with the controller
   final bool startRunning;
+
+  /// asset file path of the fragment shader
   final String shaderAsset;
+
+  /// start shader when touched
   final bool autoStartWhenTapped;
+
+  /// duration within which to stop the shader
   final Duration? duration;
+
+  /// list of [ChannelTexture] to use as textures
   final List<ChannelTexture>? iChannels;
 
   @override
@@ -32,18 +45,50 @@ class ShaderFXs extends StatefulWidget {
 }
 
 class _ShaderFXsState extends State<ShaderFXs> with TickerProviderStateMixin {
+  /// ticker used to animate the shader
   late Ticker? ticker;
+
+  /// touch position used as iMouse shader uniform
   late IMouse iMouse;
+
+  /// status of pointer
   late PointerState pointerStatus;
+
+  /// starting touch coordinates. Used by iMouse.zw
   late Offset startingPos;
+
+  /// the time since shader has been started. Used as iTime shader uniform
   late Stopwatch sw;
+
+  /// used internally to know if all channel has been set
   late bool areChannelsSet;
+
+  /// used internally to know if the 1st widget size has been acquired
   late bool isSizeAcquired;
+
+  /// whether or not the shader is running
   late bool isStopped;
-  late ValueNotifier<Widget> child;
+
+  /// list of [ChannelTexture]
   late List<ChannelTexture> iChannel;
+
+  /// widget used to bulk together [AnimatedSampler] containing
+  /// all [iChannel] widgets
+  late ValueNotifier<Widget> child;
+
+  /// flags used by iChannels initially to true to grab the widget. Then
+  /// if the widget in [ChannelTexture] has [isDynamic] set to false, it
+  /// is set to false also this to disable [AnimatedBuilder] to
+  /// always grab the widget
+  late List<ValueNotifier<bool>> isDynamicFlag;
+
+  /// the size of the widget retrieved in LayoutBuilder
   late Size widgetSize;
+
+  /// timer to stop the shader after [widget.duration] duration
   Timer? timer;
+
+
 
   @override
   void initState() {
@@ -56,6 +101,7 @@ class _ShaderFXsState extends State<ShaderFXs> with TickerProviderStateMixin {
     pointerStatus = PointerState.none;
     iMouse = IMouse.zero;
 
+    isDynamicFlag = [];
     iChannel = [];
     setupChannels();
 
@@ -145,6 +191,7 @@ class _ShaderFXsState extends State<ShaderFXs> with TickerProviderStateMixin {
     if (widget.iChannels == null) return;
 
     for (int i = 0; i < widget.iChannels!.length; ++i) {
+      isDynamicFlag.add(ValueNotifier(true));
       iChannel.add(await getImageShader(widget.iChannels![i]));
     }
     loadWidget();
@@ -153,9 +200,18 @@ class _ShaderFXsState extends State<ShaderFXs> with TickerProviderStateMixin {
   }
 
   Future<ChannelTexture> getImageShader(ChannelTexture channel) async {
+    /// if [channel] has a child, leave that untouched
+    if (channel.child != null) {
+      await loadImage(channel); // meanwhile load the blank default image
+      return channel;
+    }
+
+    /// load the image as texture
     if (channel.assetsImage != null && !(channel.isDynamic ?? false)) {
       return loadImage(channel);
     }
+
+    /// load the dynamic image (GIF ?) as a widget Image
     if (channel.assetsImage != null && (channel.isDynamic ?? false)) {
       channel.child = Image.asset(channel.assetsImage!);
       channel.assetsImage = null;
@@ -192,14 +248,31 @@ class _ShaderFXsState extends State<ShaderFXs> with TickerProviderStateMixin {
           // the first channel must be on top
           for (int i = iChannel.length - 1; i >= 0; --i)
             if (iChannel[i].child != null)
-              AnimatedSampler(
-                key: UniqueKey(),
-                (ui.Image image, size, canvas) {
-                  iChannel[i].texture = image.clone();
-                },
-                enabled: true,
-                child: iChannel[i].child!,
-              ),
+                ValueListenableBuilder(
+                  valueListenable: isDynamicFlag[i],
+                  builder: (context, isDynamic, __) {
+                    return AnimatedSampler(
+                      key: UniqueKey(),
+                      (ui.Image image, size, canvas) {
+                        iChannel[i].texture = image.clone();
+                        if (!iChannel[i].isDynamic!) {
+                          // TODO: find a better way to be sure images
+                          //       are grabbed when isDynamic is false
+                          //
+                          // grab other samplers after N ms in
+                          // case the 1st isn't taken yet
+                          // (happens when the widget has images which are
+                          // decoded asynchronously)
+                          Future.delayed(const Duration(milliseconds: 160), () {
+                            isDynamicFlag[i].value = false;
+                          });
+                        }
+                      },
+                      enabled: isDynamic,
+                      child: iChannel[i].child!,
+                    );
+                  }
+                )
         ],
       ),
     );
@@ -262,7 +335,7 @@ class _ShaderFXsState extends State<ShaderFXs> with TickerProviderStateMixin {
 
             canvas.drawRect(Offset.zero & size, Paint()..shader = shader);
           },
-          enabled: true, //!isStopped,
+          enabled: true, // !isStopped,
           child: child!,
         );
       },
