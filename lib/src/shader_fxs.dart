@@ -221,6 +221,7 @@ class _ShaderFXsState extends State<ShaderFXs> with TickerProviderStateMixin {
   }
 
   Future<ChannelTexture> loadImage(ChannelTexture channel) async {
+    if (channel.assetsImage == null) return channel;
     final Completer<ChannelTexture> completer = Completer();
     final imageData = await rootBundle.load(channel.assetsImage!);
     ui.decodeImageFromList(imageData.buffer.asUint8List(), (ui.Image img) {
@@ -256,7 +257,7 @@ class _ShaderFXsState extends State<ShaderFXs> with TickerProviderStateMixin {
                       (ui.Image image, size, canvas) {
                         iChannel[i].texture = image.clone();
                         if (!iChannel[i].isDynamic!) {
-                          // TODO: find a better way to be sure images
+                          // TODO: find a better way to be sure image widgets
                           //       are grabbed when isDynamic is false
                           //
                           // grab other samplers after N ms in

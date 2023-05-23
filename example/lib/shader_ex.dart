@@ -31,6 +31,7 @@ List<List<String>> fragLists = [
     'assets/shaders/test3.frag',
     'assets/shaders/test4.frag',
     'assets/shaders/test5.frag',
+    'assets/shaders/test6.frag',
   ]
 ];
 
@@ -77,10 +78,15 @@ class ShaderPage extends ConsumerWidget {
         children: [
           shaderWidget(
               listIndex, fragIndex, controller, chan0, chan1, chan2, chan3),
-          const SizedBox(height: 8),
-          ListView(
-            shrinkWrap: true,
-            children: buttons(listIndex, fragIndex, controller, ref),
+          const SizedBox(height: 16),
+          Expanded(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 500),
+              child: ListView(
+                shrinkWrap: true,
+                children: buttons(listIndex, fragIndex, controller, ref),
+              ),
+            ),
           ),
         ],
       ),

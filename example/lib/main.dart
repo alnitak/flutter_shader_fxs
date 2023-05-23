@@ -68,8 +68,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         body: const TabBarView(
           physics: NeverScrollableScrollPhysics(),
           children: [
-            Example1(),
             Example2(),
+            Example1(),
             ShaderPage(),
           ],
         ),

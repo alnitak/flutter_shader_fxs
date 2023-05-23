@@ -8,11 +8,11 @@ import 'test_widget.dart';
 final iChannel0Provider = StateProvider<ChannelTexture>((ref) {
   // return ChannelTexture(assetsImage: 'assets/gifs/1.gif', isDynamic: true);
   // return ChannelTexture(assetsImage: 'assets/dash.png', isDynamic: false);
-  return ChannelTexture(child: TestWidget(color: Colors.deepPurple.shade700), isDynamic: false);
+  return ChannelTexture(child: TestWidget(color: Colors.deepPurple.shade700), isDynamic: true);
 });
 
 final iChannel1Provider = StateProvider<ChannelTexture>((ref) {
-  return ChannelTexture(assetsImage: 'assets/gifs/2.gif', isDynamic: false);
+  return ChannelTexture(assetsImage: 'assets/gifs/2.gif', isDynamic: true);
   // return ChannelTexture(assetsImage: 'assets/flutter.png', isDynamic: false);
   // return ChannelTexture(child: const TestWidget(color: Colors.white), isDynamic: false);
 });
@@ -175,16 +175,16 @@ class TextureWidget extends ConsumerWidget {
           text: 'texture\n512x512'),
       Item(
           channelId: channelId,
-          texture: ChannelTexture(assetsImage: 'assets/rgba-noise-medium.png'),
+          texture: ChannelTexture(assetsImage: 'assets/rgba_noise_medium.png'),
           text: 'texture\n96x96'),
       Item(
           channelId: channelId,
-          texture: ChannelTexture(assetsImage: 'assets/rgba-noise-small.png'),
+          texture: ChannelTexture(assetsImage: 'assets/rgba_noise_small.png'),
           text: 'texture\n96x96'),
       Item(
           channelId: channelId,
           texture:
-              ChannelTexture(assetsImage: 'assets/gifs/9.gif', isDynamic: true),
+              ChannelTexture(assetsImage: 'assets/gifs/2.gif', isDynamic: true),
           text: 'animated GIF'),
       Item(
           channelId: channelId,

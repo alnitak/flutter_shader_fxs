@@ -5,7 +5,7 @@ publish_to: 'none'
 version: 0.0.0+1
 
 environment:
-  sdk: '>=2.19.0 <3.0.0'
+  sdk: '>=2.19.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -49,3 +49,4 @@ flutter:
     - assets/shaders/test3.frag
     - assets/shaders/test4.frag
     - assets/shaders/test5.frag
+    - assets/shaders/test6.frag
