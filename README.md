@@ -3,11 +3,12 @@
 A flutter pluging to use shaders and use them to make transitions between widgets and/or images, or just without textures.
 
 
-- Still work in progress.
+## Discontinued! In favor of [shader_presets](https://github.com/alnitak/shader_presets) which provides ready-to-use shaders using the [shader_buffers](https://github.com/alnitak/shader_buffers) package.
+
 
 ||Flutter 3.7.12 </br> channel stable|Flutter 3.10.0-16.0.pre.33 </br> channel master|
 |---|---|---|
-|**Android**|• Images and GIFs are grabbed correctly</br>• Performaces degradation till crash</br>• Swap textures when using a widget doesn't work as expected|Problems setting samplers|
+|**Android**|• Images and GIFs are grabbed correctly</br>• Performances degradation till crash</br>• Swap textures when using a widget doesn't work as expected|Problems setting samplers|
 |**iOS**|Problems setting samplers|Problems setting samplers|
 |**web**|Not yet supported|Slow but no issues|
 |**Linux**|• Images are not grabbed when used inside a widget</br>• Swap textures when using a widget doesn't work as expected|No issues|
